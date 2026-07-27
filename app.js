@@ -16,21 +16,6 @@ const fieldIds = [
   "new-salary",
 ];
 
-const monthNames = [
-  "كانون الثاني",
-  "شباط",
-  "آذار",
-  "نيسان",
-  "أيار",
-  "حزيران",
-  "تموز",
-  "آب",
-  "أيلول",
-  "تشرين الأول",
-  "تشرين الثاني",
-  "كانون الأول",
-];
-
 const fields = [
   {
     id: "employee-name",
@@ -76,6 +61,21 @@ const fields = [
     id: "new-salary",
     validate: (value) => value !== "" && Number(value) >= 0,
   },
+];
+
+const monthNames = [
+  "كانون الثاني",
+  "شباط",
+  "آذار",
+  "نيسان",
+  "أيار",
+  "حزيران",
+  "تموز",
+  "آب",
+  "أيلول",
+  "تشرين الأول",
+  "تشرين الثاني",
+  "كانون الأول",
 ];
 
 /**
@@ -172,6 +172,11 @@ function parseDateInput(value) {
 
 function monthLabel(year, month) {
   return `${monthNames[month - 1]} ${toEasternDigitString(year)}`;
+}
+
+function formatNumericDate(dateInput) {
+  const raw = `${dateInput.year}/${String(dateInput.month).padStart(2, "0")}/${String(dateInput.day).padStart(2, "0")}`;
+  return raw.replace(/\d/g, (digit) => EASTERN_DIGITS[digit]);
 }
 
 /**
@@ -282,10 +287,6 @@ function validateForm() {
   return isValid;
 }
 
-function formatDate(dateInput) {
-  return `${toEasternDigitString(dateInput.day)} ${monthLabel(dateInput.year, dateInput.month)}`;
-}
-
 function todayDate() {
   const now = new Date();
   return {
@@ -310,7 +311,7 @@ function renderResult(data, info) {
       </div>
       <div class="sheet-header-meta">
         <p class="sheet-org">مديرية تقاعد كركوك</p>
-        <p class="sheet-date">تاريخ التنظيم: ${formatDate(todayDate())}</p>
+        <p class="sheet-date">تاريخ التنظيم: ${formatNumericDate(todayDate())}</p>
       </div>
     </div>
 
@@ -326,9 +327,9 @@ function renderResult(data, info) {
         <div><dt>الدرجة والمرحلة (قبل العلاوة)</dt><dd>${formatGradeAndLevel(data.currentSalary)}</dd></div>
       </dl>
       <dl class="meta-column meta-allowance">
-        <div><dt>رقم العلاوة (وتاريخها)</dt><dd>${formatPlainNumber(info.allowanceNumber)} <span class="meta-secondary">· ${formatDate(info.allowanceDocDate)}</span></dd></div>
-        <div><dt>اعتباراً من</dt><dd>${formatDate(data.start)}</dd></div>
-        <div><dt>لغاية</dt><dd>${formatDate(data.end)}</dd></div>
+        <div><dt>رقم العلاوة (وتاريخها)</dt><dd>${formatPlainNumber(info.allowanceNumber)} <span class="meta-secondary">· ${formatNumericDate(info.allowanceDocDate)}</span></dd></div>
+        <div><dt>اعتباراً من</dt><dd>${formatNumericDate(data.start)}</dd></div>
+        <div><dt>لغاية</dt><dd>${formatNumericDate(data.end)}</dd></div>
         <div><dt>الدرجة والمرحلة (بعد العلاوة)</dt><dd>${formatGradeAndLevel(data.newSalary)}</dd></div>
       </dl>
     </div>
@@ -385,7 +386,7 @@ function renderResult(data, info) {
     </ol>
 
     <div class="total">
-      <span>الراتب الاسمي مع الفروقات اعتباراً من ${formatDate(data.start)} ولغاية ${formatDate(data.end)}</span>
+      <span>الراتب الاسمي مع الفروقات اعتباراً من ${formatNumericDate(data.start)} ولغاية ${formatNumericDate(data.end)}</span>
       <strong>${formatNumber(data.grandTotal)} دينار</strong>
     </div>
   `;

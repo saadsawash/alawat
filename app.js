@@ -79,44 +79,46 @@ const fields = [
 ];
 
 /**
- * Salary ladder in thousands of dinars (320 means 320,000).
+ * Salary ladder in full dinars.
  * Outer index = الدرجة (1-based), inner index = المرحلة (1-based).
  * Columns go المرحلة ١ → ١١, matching the table right → left.
  */
 const SALARY_LADDER = [
-  [910, 930, 950, 970, 990, 1010, 1030, 1050, 1070, 1090, 1110], // درجة ١
-  [723, 740, 757, 774, 791, 808, 825, 842, 859, 876, 893], // درجة ٢
-  [600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700], // درجة ٣
-  [498, 506, 514, 522, 530, 538, 546, 554, 562, 570, 578], // درجة ٤
-  [428, 434, 440, 446, 452, 458, 464, 470, 476, 482, 488], // درجة ٥
-  [362, 368, 374, 380, 386, 392, 398, 404, 410, 416, 422], // درجة ٦
-  [296, 302, 308, 314, 320, 326, 332, 338, 344, 350, 356], // درجة ٧
-  [260, 263, 266, 269, 272, 275, 278, 281, 284, 287, 290], // درجة ٨
-  [210, 213, 216, 219, 222, 225, 228, 231, 234, 237, 240], // درجة ٩
-  [170, 173, 176, 179, 182, 185, 188, 191, 194, 197, 200], // درجة ١٠
+  [910000, 930000, 950000, 970000, 990000, 1010000, 1030000, 1050000, 1070000, 1090000, 1110000], // درجة ١
+  [723000, 740000, 757000, 774000, 791000, 808000, 825000, 842000, 859000, 876000, 893000], // درجة ٢
+  [600000, 610000, 620000, 630000, 640000, 650000, 660000, 670000, 680000, 690000, 700000], // درجة ٣
+  [509000, 517000, 525000, 533000, 541000, 549000, 557000, 565000, 573000, 581000, 589000], // درجة ٤
+  [429000, 435000, 441000, 447000, 453000, 459000, 465000, 471000, 477000, 483000, 489000], // درجة ٥
+  [362000, 368000, 374000, 380000, 386000, 392000, 398000, 404000, 410000, 416000, 422000], // درجة ٦
+  [296000, 302000, 308000, 314000, 320000, 326000, 332000, 338000, 344000, 350000, 356000], // درجة ٧
+  [260000, 263000, 266000, 269000, 272000, 275000, 278000, 281000, 284000, 287000, 290000], // درجة ٨
+  [210000, 213000, 216000, 219000, 222000, 225000, 228000, 231000, 234000, 237000, 240000], // درجة ٩
+  [170000, 173000, 176000, 179000, 182000, 185000, 188000, 191000, 194000, 197000, 200000], // درجة ١٠
 ];
 
-function findGradeAndStage(salary) {
-  if (!Number.isFinite(salary) || salary <= 0 || salary % 1000 !== 0) {
+const SALARY_LADDER_LOOKUP = new Map();
+
+for (let gradeIndex = 0; gradeIndex < SALARY_LADDER.length; gradeIndex += 1) {
+  for (let levelIndex = 0; levelIndex < SALARY_LADDER[gradeIndex].length; levelIndex += 1) {
+    SALARY_LADDER_LOOKUP.set(SALARY_LADDER[gradeIndex][levelIndex], {
+      grade: gradeIndex + 1,
+      level: levelIndex + 1,
+    });
+  }
+}
+
+function findGradeAndLevel(salary) {
+  if (!Number.isFinite(salary) || salary <= 0) {
     return null;
   }
 
-  const thousands = salary / 1000;
-
-  for (let gradeIndex = 0; gradeIndex < SALARY_LADDER.length; gradeIndex += 1) {
-    const stageIndex = SALARY_LADDER[gradeIndex].indexOf(thousands);
-    if (stageIndex !== -1) {
-      return { grade: gradeIndex + 1, stage: stageIndex + 1 };
-    }
-  }
-
-  return null;
+  return SALARY_LADDER_LOOKUP.get(Math.trunc(salary)) ?? null;
 }
 
-function formatGradeAndStage(salary) {
-  const match = findGradeAndStage(salary);
+function formatGradeAndLevel(salary) {
+  const match = findGradeAndLevel(salary);
   if (!match) return "—";
-  return `الدرجة ${formatPlainNumber(match.grade)} · المرحلة ${formatPlainNumber(match.stage)}`;
+  return `الدرجة ${formatPlainNumber(match.grade)} · المرحلة ${formatPlainNumber(match.level)}`;
 }
 
 const EASTERN_DIGITS = "٠١٢٣٤٥٦٧٨٩";
@@ -321,13 +323,13 @@ function renderResult(data, info) {
         }</dd></div>
         <div><dt>العنوان الوظيفي</dt><dd>${escapeHtml(info.jobTitle)}</dd></div>
         <div><dt>الشهادة</dt><dd>${escapeHtml(info.educationLevel)}</dd></div>
-        <div><dt>الدرجة والمرحلة (قبل العلاوة)</dt><dd>${formatGradeAndStage(data.currentSalary)}</dd></div>
+        <div><dt>الدرجة والمرحلة (قبل العلاوة)</dt><dd>${formatGradeAndLevel(data.currentSalary)}</dd></div>
       </dl>
       <dl class="meta-column meta-allowance">
         <div><dt>رقم العلاوة (وتاريخها)</dt><dd>${formatPlainNumber(info.allowanceNumber)} <span class="meta-secondary">· ${formatDate(info.allowanceDocDate)}</span></dd></div>
         <div><dt>اعتباراً من</dt><dd>${formatDate(data.start)}</dd></div>
         <div><dt>لغاية</dt><dd>${formatDate(data.end)}</dd></div>
-        <div><dt>الدرجة والمرحلة (بعد العلاوة)</dt><dd>${formatGradeAndStage(data.newSalary)}</dd></div>
+        <div><dt>الدرجة والمرحلة (بعد العلاوة)</dt><dd>${formatGradeAndLevel(data.newSalary)}</dd></div>
       </dl>
     </div>
 

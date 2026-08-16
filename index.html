@@ -3,231 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>احتساب فروقات العلاوات</title>
+    <title>أدوات مفيدة</title>
     <link rel="stylesheet" href="fonts.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <div class="page">
-      <header class="header">
-        <h1>احتساب فروقات العلاوة</h1>
-        <p class="subtitle">
-          أدخل بيانات الموظف والعلاوة لحساب الفروقات بين تاريخين.
-        </p>
+  <body class="home-body">
+    <div class="home">
+      <header class="home-header">
+        <div class="home-brand" aria-hidden="true">
+          <svg class="home-brand-icon" viewBox="0 0 48 48" focusable="false">
+            <rect
+              x="10"
+              y="6"
+              width="28"
+              height="36"
+              rx="4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            />
+            <rect x="16" y="12" width="16" height="7" rx="1.5" fill="currentColor" opacity="0.9" />
+            <circle cx="18" cy="27" r="2.1" fill="currentColor" />
+            <circle cx="24" cy="27" r="2.1" fill="currentColor" />
+            <circle cx="30" cy="27" r="2.1" fill="currentColor" />
+            <circle cx="18" cy="34" r="2.1" fill="currentColor" />
+            <circle cx="24" cy="34" r="2.1" fill="currentColor" />
+            <circle cx="30" cy="34" r="2.1" fill="currentColor" opacity="0.55" />
+          </svg>
+        </div>
+        <p class="home-subtitle">اختر التطبيق للمتابعة</p>
       </header>
 
-      <main>
-        <form id="allowance-form" class="form" novalidate>
-          <div class="clear-fab-wrap">
-            <button type="reset" class="clear-fab" aria-label="تفريغ الحقول" aria-describedby="clear-fab-tooltip">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M3 6h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              </svg>
-            </button>
-            <span id="clear-fab-tooltip" class="clear-fab-tooltip" role="tooltip">تفريغ الحقول</span>
-          </div>
-          <section class="section" aria-labelledby="employee-heading">
-            <h2 id="employee-heading">بيانات الموظف</h2>
-
-            <div class="grid">
-            <div class="field">
-              <label for="employee-name">اسم الموظف</label>
-              <input
-                type="text"
-                id="employee-name"
-                name="employeeName"
-                autocomplete="name"
-                placeholder="مثال: أحمد محمد علي"
-                required
-              />
-              <p class="error" id="employee-name-error" hidden>
-                يرجى إدخال اسم الموظف.
-              </p>
-            </div>
-
-            <div class="field">
-              <label for="job-title">العنوان الوظيفي</label>
-              <input
-                type="text"
-                id="job-title"
-                name="jobTitle"
-                placeholder="مثال: معاون مدير"
-                required
-              />
-              <p class="error" id="job-title-error" hidden>
-                يرجى إدخال العنوان الوظيفي.
-              </p>
-            </div>
-            </div>
-
-            <div class="grid">
-            <div class="field">
-              <label for="education-level">الشهادة</label>
-              <select id="education-level" name="educationLevel" required>
-                <option value="" disabled selected>اختر الشهادة</option>
-                <option value="ابتدائية">ابتدائية</option>
-                <option value="متوسطة">متوسطة</option>
-                <option value="إعدادية">إعدادية</option>
-                <option value="دبلوم">دبلوم</option>
-                <option value="بكالوريوس">بكالوريوس</option>
-                <option value="ماجستير">ماجستير</option>
-                <option value="دكتوراه">دكتوراه</option>
-              </select>
-              <p class="error" id="education-level-error" hidden>
-                يرجى اختيار الشهادة.
-              </p>
-            </div>
-
-            <div class="field">
-              <label for="salary-list-order">التسلسل في قائمة الراتب <span class="optional">(اختياري)</span></label>
-              <input
-                type="number"
-                id="salary-list-order"
-                name="salaryListOrder"
-                min="1"
-                max="5000"
-                step="1"
-                inputmode="numeric"
-                placeholder="مثال: 12"
-              />
-              <p class="error" id="salary-list-order-error" hidden>
-                يرجى إدخال رقم بين ١ و ٥٠٠٠.
-              </p>
-            </div>
-            </div>
-          </section>
-
-          <section class="section" aria-labelledby="salary-heading">
-            <h2 id="salary-heading">الراتب الاسمي</h2>
-
-            <div class="grid">
-              <div class="field">
-                <label for="current-salary">الراتب الاسمي قبل العلاوة</label>
-                <div class="input-with-suffix">
-                  <input
-                    type="number"
-                    id="current-salary"
-                    name="currentSalary"
-                    min="0"
-                    step="1"
-                    inputmode="numeric"
-                    placeholder="0"
-                    required
-                  />
-                  <span class="suffix">دينار</span>
-                </div>
-                <p class="error" id="current-salary-error" hidden>
-                  يرجى إدخال الراتب الاسمي قبل العلاوة.
-                </p>
-              </div>
-
-              <div class="field">
-                <label for="new-salary">الراتب الاسمي بعد العلاوة</label>
-                <div class="input-with-suffix">
-                  <input
-                    type="number"
-                    id="new-salary"
-                    name="newSalary"
-                    min="0"
-                    step="1"
-                    inputmode="numeric"
-                    placeholder="0"
-                    required
-                  />
-                  <span class="suffix">دينار</span>
-                </div>
-                <p class="error" id="new-salary-error" hidden>
-                  يرجى إدخال الراتب الاسمي بعد العلاوة.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section class="section" aria-labelledby="allowance-heading">
-            <h2 id="allowance-heading">بيانات العلاوة</h2>
-
-            <div class="grid">
-              <div class="field">
-                <label for="allowance-number">رقم العلاوة</label>
-                <input
-                  type="number"
-                  id="allowance-number"
-                  name="allowanceNumber"
-                  min="1"
-                  step="1"
-                  inputmode="numeric"
-                  placeholder="مثال: 5"
-                  required
-                />
-                <p class="error" id="allowance-number-error" hidden>
-                  يرجى إدخال رقم العلاوة.
-                </p>
-              </div>
-
-              <div class="field">
-                <label for="allowance-doc-date">تاريخ العلاوة</label>
-                <input
-                  type="date"
-                  id="allowance-doc-date"
-                  name="allowanceDocDate"
-                  required
-                />
-                <p class="error" id="allowance-doc-date-error" hidden>
-                  يرجى إدخال تاريخ العلاوة.
-                </p>
-              </div>
-            </div>
-
-            <div class="grid">
-              <div class="field">
-                <label for="from-date">اعتباراً من</label>
-                <input
-                  type="date"
-                  id="from-date"
-                  name="fromDate"
-                  required
-                />
-                <p class="hint">يُحسب شهر البداية شهراً كاملاً بغض النظر عن اليوم</p>
-                <p class="error" id="from-date-error" hidden>
-                  يرجى إدخال تاريخ البداية.
-                </p>
-              </div>
-
-              <div class="field">
-                <label for="to-date">لغاية</label>
-                <input type="date" id="to-date" name="toDate" required />
-                <p class="hint">نهاية فترة احتساب الفروقات (يُضاف راتب الشهر الأخير كاملاً)</p>
-                <p class="error" id="to-date-error" hidden>
-                  يرجى إدخال تاريخ النهاية.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <div class="actions">
-            <button type="submit" class="btn btn-primary">احتساب الفروقات</button>
-          </div>
-        </form>
-
-        <section id="result" class="result" aria-live="polite" hidden>
-          <h2 class="no-print">نتيجة الاحتساب</h2>
-          <div id="print-sheet" class="print-sheet">
-            <div id="result-content"></div>
-          </div>
-          <div class="result-actions no-print">
-            <button id="print-btn" type="button" class="btn btn-primary">
-              طباعة استمارة المتغيرات
-            </button>
-          </div>
-        </section>
-      </main>
+      <nav class="app-grid" aria-label="قائمة التطبيقات" id="app-grid">
+        <a
+          class="app-tile app-tile--live"
+          href="apps/alawat/"
+          style="--i: 0"
+        >
+          احتساب فروقات العلاوة
+        </a>
+        <a
+          class="app-tile app-tile--live"
+          href="apps/daraja/"
+          style="--i: 1"
+        >
+          الدرجة والمرحلة
+        </a>
+      </nav>
     </div>
 
-    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+    <script>
+      (function () {
+        var grid = document.getElementById("app-grid");
+        var total = 9;
+        var start = 2;
+        var frag = document.createDocumentFragment();
 
-    <script src="app.js"></script>
+        for (var i = start; i < total; i++) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "app-tile app-tile--soon";
+          btn.disabled = true;
+          btn.textContent = "قريباً";
+          btn.style.setProperty("--i", String(i));
+          frag.appendChild(btn);
+        }
+
+        grid.appendChild(frag);
+      })();
+    </script>
   </body>
 </html>
